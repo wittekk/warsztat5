@@ -6,11 +6,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class HomeController {
+	
 	@GetMapping("/home")
 	@ResponseBody
 	public String home() {
-		return "you are at home Wiciu";
-		
+		return "you are at home";		
 	}
-
 }
