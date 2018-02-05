@@ -1,0 +1,52 @@
+$(document).ready(function(){
+    var bookList = $('#book-list');
+    var formButton = $('#btn');
+    
+    //task3
+    //get books from server
+    $.ajax({
+        url : 'http://localhost:8080/Warsztat5/books',
+        type : 'GET'
+    }).done(function(books) {
+        for(var book of books) {
+            var p = $('<p>').data('id',book.id).text(book.title);
+            var div = $('<div>').hide();
+            p.appendTo(bookList);
+            div.appendTo(bookList);
+        }
+    })
+    
+    //task 4
+    //slide down book details
+    bookList.on('click', 'p', function() {
+        var pDiv = $(this).next();
+        var id = $(this).data('id');
+        $.ajax({
+            url : 'http://localhost:8080/Warsztat5/books/' + id,
+            type : 'GET'
+        }).done(function(book) {
+            pDiv.text(book.title + ', ' + book.isbn + ', ' + book.author);
+            pDiv.slideDown();
+        })
+    })
+    
+    //task 5
+    //add new book by submitting the form
+    formButton.on('click', function(event) {
+        var currentBook = {
+            isbn: $('#isbn').val(),
+            title: $('#title').val(),
+            author: $('#author').val(),
+            publisher: $('#publisher').val(),
+            type: $('#type').val()
+        };
+        $.ajax({
+            url : 'http://localhost:8080/Warsztat5/books',
+            data: JSON.stringify(currentBook),
+            contentType : 'application/json',
+            type : 'POST'
+        }).done(function(book) {
+            console.log('sent');
+        })
+        event.preventDefault();
+    })
